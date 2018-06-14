@@ -34,13 +34,13 @@ var registerButton = document.getElementById('registerButton');
 
 loginButton.addEventListener('click', e => {
     console.log('entra en login');
-    window.location = 'form.html';
     const mail = mailInput.value;
     const password = passwordInput.value;
     const auth = firebase.auth();
     
     const promise = auth.signInWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
+    hola()
 });
 
 registerButton.addEventListener('click', e => {
@@ -49,36 +49,46 @@ registerButton.addEventListener('click', e => {
     const auth = firebase.auth();
     
     const promise = auth.createUserWithEmailAndPassword(mail, password);
-    window.location = 'form.html';
     promise.catch (e => console.log (e.message))
+    hola();
 });
 
+var logoutButton = document.getElementById('logoutButton');
+    
+    
+logoutButton.addEventListener('click', e => {
+    const auth = firebase.auth();
+    const promise = auth.signOut();
 
+});
 
-// firebase.auth().onAuthStateChanged(firebaseUser => {
+ function hola(){
+firebase.auth().onAuthStateChanged(firebaseUser => {
 
-//     if (firebaseUser) {
-//         // window.location = 'form.html';
-//         console.log(firebaseUser);
-//         //logoutButton.classList.remove('hidden');
+    if (firebaseUser) {
+        
+        console.log(firebaseUser);
+        //logoutButton.classList.remove('hidden');
       
-//         const userReference = firebase.database().ref(`users/${firebaseUser.uid}`);
-//         userReference.once('value', snapshot => {
+        const userReference = firebase.database().ref(`users/${firebaseUser.uid}`);
+        userReference.once('value', snapshot => {
             
-//             if (!snapshot.val()) {
+            if (!snapshot.val()) {
                 
-//                 // User does not exist, create user entry
-//                 console.log(mailInput.value)
-//                 userReference.set({
-//                     email: mailInput.value
-//                  });
-//             }
-//         });
-//         console.log(firebaseUser.uid)
-//         //setLoggedUserState();
-//         }else {
-//             console.log('no logueado');
-//             //logoutButton.classList.add('hidden');
-//             //setLoggedOutUserState();
-//         }
-//  });
+                // User does not exist, create user entry
+                console.log(mailInput.value)
+                userReference.set({
+                    email: mailInput.value
+                 });
+            }
+        });
+        console.log(firebaseUser.uid);
+        // window.location = 'form.html';
+        //setLoggedUserState();
+        }else {
+            console.log('no logueado');
+            //logoutButton.classList.add('hidden');
+            //setLoggedOutUserState();
+        }
+ });
+}
