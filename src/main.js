@@ -34,13 +34,13 @@ var registerButton = document.getElementById('registerButton');
 
 loginButton.addEventListener('click', e => {
     console.log('entra en login');
-    window.location = 'form.html';
     const mail = mailInput.value;
     const password = passwordInput.value;
     const auth = firebase.auth();
     
     const promise = auth.signInWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
+    hola()
 });
 
 registerButton.addEventListener('click', e => {
@@ -49,10 +49,18 @@ registerButton.addEventListener('click', e => {
     const auth = firebase.auth();
     
     const promise = auth.createUserWithEmailAndPassword(mail, password);
-    window.location = 'form.html';
     promise.catch (e => console.log (e.message))
+    hola();
 });
 
+var logoutButton = document.getElementById('logoutButton');
+    
+    
+logoutButton.addEventListener('click', e => {
+    const auth = firebase.auth();
+    const promise = auth.signOut();
+
+});
 
 
 firebase.auth().onAuthStateChanged(firebaseUser => {
@@ -62,6 +70,7 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
         console.log(firebaseUser);
         //logoutButton.classList.remove('hidden');
     
+
         const userReference = firebase.database().ref(`users/${firebaseUser.uid}`);
         userReference.once('value', snapshot => {
             
@@ -74,11 +83,15 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
                  });
             }
         });
+
         console.log(firebaseUser.uid)
+
         //setLoggedUserState();
         }else {
             console.log('no logueado');
             //logoutButton.classList.add('hidden');
             //setLoggedOutUserState();
         }
+
  });
+
