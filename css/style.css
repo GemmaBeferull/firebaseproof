@@ -5,3 +5,12 @@ body {
 .hidden {
     display: none;
 }
+
+.alert{
+    text-align: center;
+    padding: 10px;
+    background: #79c879;
+    color: #fff;
+    margin-bottom: 1px;
+    display: none;
+}
