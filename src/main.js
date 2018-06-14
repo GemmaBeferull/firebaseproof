@@ -32,6 +32,8 @@ var logoutButton = document.getElementById('logoutButton');
 
 
 loginButton.addEventListener('click', e => {
+    console.log('entra en login');
+    window.location = 'form.html';
     const mail = mailInput.value;
     const password = passwordInput.value;
     const auth = firebase.auth();
@@ -56,11 +58,28 @@ logoutButton.addEventListener('click', e => {
 
 
 firebase.auth().onAuthStateChanged(firebaseUser => {
-    if(firebaseUser){
+
+    if (firebaseUser) {
         console.log(firebaseUser);
-        logoutButton.classList.remove('hidden');
-    } else{
-        console.log('no logueado');
-        logoutButton.classList.add('hidden');
-    }
-})
+        //logoutButton.classList.remove('hidden');
+      
+        const userReference = firebase.database().ref(`users/${firebaseUser.uid}`);
+        userReference.once('value', snapshot => {
+            
+            if (!snapshot.val()) {
+                window.location = 'form.html';
+                // User does not exist, create user entry
+                console.log(mailInput.value)
+                userReference.set({
+                    email: mailInput.value
+                 });
+            }
+        });
+        console.log(firebaseUser.uid)
+        //setLoggedUserState();
+        }else {
+            console.log('no logueado');
+            //logoutButton.classList.add('hidden');
+            //setLoggedOutUserState();
+        }
+ });
