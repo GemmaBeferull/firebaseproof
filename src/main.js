@@ -8,17 +8,18 @@ var config = {
   messagingSenderId: "785154341794"
 };
 firebase.initializeApp(config);
-console.log('hola');
+startFirebase();
 }())
 
 var mailInput = document.getElementById('mailInput');
 var passwordInput = document.getElementById('passwordInput');
 var loginButton = document.getElementById('loginButton');
 var registerButton = document.getElementById('registerButton');
+var logoutButton = document.getElementById('logoutButton');
+var showHiddenObjects = document.querySelector('.hide')
 var userID = '';
 
 loginButton.addEventListener('click', e => {
-    console.log('entra en login');
     const mail = mailInput.value;
     const password = passwordInput.value;
     const auth = firebase.auth();
@@ -40,46 +41,33 @@ registerButton.addEventListener('click', e => {
     showForm()
 });
 
-var logoutButton = document.getElementById('logoutButton');
-    
-    
 logoutButton.addEventListener('click', e => {
     const auth = firebase.auth();
     const promise = auth.signOut();
 
 });
 
-var showStuff = document.querySelector('.hide')
 function showForm(){
-    showStuff.classList.remove('hide');
+    showHiddenObjects.classList.remove('hide');
 }
-firebase.auth().onAuthStateChanged(firebaseUser => {
 
-    if (firebaseUser) {
-        console.log(firebaseUser);
-        logoutButton.classList.remove('hide');
-        const userReference = firebase.database().ref(`users/${firebaseUser.uid}`);
-        userReference.once('value', snapshot => {       
-            if (!snapshot.val()) {          
-                // User does not exist, create user entry
-                console.log(mailInput.value)
-                userReference.set({
-                    email: mailInput.value
-                 });
+function startFirebase(){
+    firebase.auth().onAuthStateChanged(firebaseUser => {
+
+        if (firebaseUser) {
+            console.log(firebaseUser.uid);
+            userID = firebaseUser.uid;
+            return userID;
+            }else {
+                console.log('no logueado');
             }
-        });
+    
+     })
+};
 
-        console.log(firebaseUser.uid);
-        userID = firebaseUser.uid;
-        return userID;
-        }else {
-            console.log('no logueado');
-        }
-
- });
 
      //Reference messages collection
-     var messagesRef = firebase.database().ref('personalData');
+     var messagesRef = firebase.database().ref(`users/${userID}`);
      var submitButton = document.getElementById('submit__button');
      submitButton.addEventListener('click', submitForm);
  
@@ -120,8 +108,8 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
              surnames: surnames,
              personalPhone: personalPhone,
              professionalPhone: professionalPhone,
-             personalEmail: personalEmail,
-             professionalEmail: professionalEmail,
+             personalEmail: professionalEmail,
+             professionalEmail: mailInput.value,
              capacity: capacity,
              picture: picture,
  
