@@ -9,21 +9,9 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div class="title">
-        <h1>Data-K</h1>   
-    </div>
-    <div class= "loginArea">
-        <input id="mailInput" type="text" placeholder="email">
-        <input id="passwordInput" type="password" placeholder="password">
-        <button id="loginButton">Login</button>
-        <button id="registerButton">Register</button>
-        <button id="logoutButton" class= "hidden">Logout</button>
-    </div>
-
-
-    <div class="form" >
+    <div >
         <div class="alert">Tus datos se han guardado correctamente</div>
-     <form class="form__container hide" action="submit">
+     <form class="form__container" action="submit">
         <input id="input__name" type="text" class="input__field" required placeholder="Nombre">
         <input id= "input__surnames" type="text" class="input__field" required placeholder="Apellidos">
         <input id="input__personalPhone" type="text" class="input__field" placeholder="Teléfono personal">
@@ -35,14 +23,9 @@
         <button id="submit__button" type="button">Enviar</button>
      </form>
     </div>
-    <button class="hide" id="logoutButton" >Logout</button>
-   
-   <div class="names hide">
-       <p class = "name">Nombre</p>
-       <p class= "lastname">Apellido</p>
-   </div>
-
+    <button id="logoutButton" >Logout</button>
     
-<script src="/src/main.js"></script>
+<script src="/src/form.js"></script>
+
 </body>
 </html>
