@@ -19,22 +19,23 @@ var logoutButton = document.getElementById('logoutButton');
 var showHiddenObjects = document.querySelector('.hide')
 var userID = '';
 
+
+
 loginButton.addEventListener('click', e => {
     const mail = mailInput.value;
     const password = passwordInput.value;
     const auth = firebase.auth();
-    
+
     const promise = auth.signInWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
     alert('user has logged in');
     showForm();
 });
 
-registerButton.addEventListener('click', e => {
+registerButton.addEventListener('click', e => {    
     const mail = mailInput.value;
     const password = passwordInput.value;
     const auth = firebase.auth();
-    
     const promise = auth.createUserWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
     alert('user has been registered');
@@ -53,7 +54,6 @@ function showForm(){
 
 function startFirebase(){
     firebase.auth().onAuthStateChanged(firebaseUser => {
-
         if (firebaseUser) {
             console.log(firebaseUser.uid);
             userID = firebaseUser.uid;
@@ -83,9 +83,11 @@ function startFirebase(){
          var professionalEmail = getInputValue('input__professionalEmail');
          var capacity = getInputValue('input__capacity');
          var picture = getInputValue('input__picture');
+         var password = passwordInput.value;
+         
 
          //Save fields
-         savePersonalData(userID, name,surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture)
+         savePersonalData(userID, password, name, surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture)
              
          //Show alert
          document.querySelector('.alert').style.display = 'block';
@@ -100,10 +102,11 @@ function startFirebase(){
      }
  
      //Save messages to firebase
-     function savePersonalData(userID, name,surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture){
+     function savePersonalData(userID, password, name, surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture){
          var newMessageRef = messagesRef.push();
          newMessageRef.set({
              userID: userID,
+             password: password,
              name: name,
              surnames: surnames,
              personalPhone: personalPhone,
