@@ -17,15 +17,20 @@
         <input id="passwordInput" type="text" placeholder="password">
         <button id="loginButton">Login</button>
         <button id="registerButton">Register</button>
-        <button id="logoutButton" class= "hidden">Logout</button>
+        
     </div>
-   <form class="hidden">
-    <input type="text" name="firstname">
-    <input type="text" name="lastname">
+    <button id="logoutButton" class= "hidden">Logout</button>
+    
+   <form class="hidden" id ="formulario">
+        <h1>Rellena con tu nombre y apellido</h1>
+    <input type="text" name="firstname" class="nombre">
+    <input type="text" name="lastname" class="apellido">
+    <button id="saveButton">Guardar</button>
    </form>
-   <div class="hidden">
-       <p class = "name">Nombre</p>
-       <p class= "lastname">Apellido</p>
+   <div class="hidden show">
+       <p class = "showName">Nombre</p>
+       <p class= "showlastname">Apellido</p>
+       <p class="showEmail"></p>
    </div>
 
     
