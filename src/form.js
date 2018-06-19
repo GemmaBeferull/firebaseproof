@@ -44,9 +44,9 @@
         var professionalEmail = getInputValue('input__professionalEmail');
         var capacity = getInputValue('input__capacity');
         var picture = getInputValue('input__picture');
-
+        var userID = '';
         //Save fields
-        savePersonalData(name,surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture)
+        savePersonalData(userID, name,surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture)
             
         //Show alert
         document.querySelector('.alert').style.display = 'block';
@@ -61,9 +61,10 @@
     }
 
     //Save messages to firebase
-    function savePersonalData(name,surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture){
+    function savePersonalData(userID, name,surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture){
         var newMessageRef = messagesRef.push();
         newMessageRef.set({
+            userID: userID,
             name: name,
             surnames: surnames,
             personalPhone: personalPhone,
@@ -71,10 +72,10 @@
             personalEmail: personalEmail,
             professionalEmail: professionalEmail,
             capacity: capacity,
-            picture: picture,
-
+            picture: picture
         })
-    }
+    };
+
 
 
 

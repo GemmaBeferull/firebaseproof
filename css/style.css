@@ -1,8 +1,7 @@
 body {
     text-align: center;
 }
-
-.hidden {
+.hide {
     display: none;
 }
 
@@ -14,3 +13,4 @@ body {
     margin-bottom: 1px;
     display: none;
 }
+

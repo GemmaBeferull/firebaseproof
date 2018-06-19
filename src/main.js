@@ -8,20 +8,6 @@ var config = {
   messagingSenderId: "785154341794"
 };
 firebase.initializeApp(config);
-
-/* */
-// var pre = document.getElementById('objeto');
-// var dbRefObject = firebase.database().ref().child('rita'); 
-
-/*'value' detecta cambios en contenido 
-   on()  llama a la funcion cuando pasa el evento (en este caso 'value')
-   once() llama a la funcion cuando pasa el evento pero solo una vez
-   off() deja de escuchar el evento
- */
-// dbRefObject.on('value', snap => {
-//     console.log(snap.val())
-//     pre.innerHTML = JSON.stringify(snap.val());
-// });
 console.log('hola');
 }())
 
@@ -29,8 +15,7 @@ var mailInput = document.getElementById('mailInput');
 var passwordInput = document.getElementById('passwordInput');
 var loginButton = document.getElementById('loginButton');
 var registerButton = document.getElementById('registerButton');
-
-
+var userID = '';
 
 loginButton.addEventListener('click', e => {
     console.log('entra en login');
@@ -40,7 +25,8 @@ loginButton.addEventListener('click', e => {
     
     const promise = auth.signInWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
-    hola()
+    alert('user has logged in');
+    showForm();
 });
 
 registerButton.addEventListener('click', e => {
@@ -50,7 +36,8 @@ registerButton.addEventListener('click', e => {
     
     const promise = auth.createUserWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
-    hola();
+    alert('user has been registered');
+    showForm()
 });
 
 var logoutButton = document.getElementById('logoutButton');
@@ -62,20 +49,18 @@ logoutButton.addEventListener('click', e => {
 
 });
 
-
+var showStuff = document.querySelector('.hide')
+function showForm(){
+    showStuff.classList.remove('hide');
+}
 firebase.auth().onAuthStateChanged(firebaseUser => {
 
     if (firebaseUser) {
-        // window.location = 'form.html';
         console.log(firebaseUser);
-        //logoutButton.classList.remove('hidden');
-    
-
+        logoutButton.classList.remove('hide');
         const userReference = firebase.database().ref(`users/${firebaseUser.uid}`);
-        userReference.once('value', snapshot => {
-            
-            if (!snapshot.val()) {
-                
+        userReference.once('value', snapshot => {       
+            if (!snapshot.val()) {          
                 // User does not exist, create user entry
                 console.log(mailInput.value)
                 userReference.set({
@@ -84,14 +69,62 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
             }
         });
 
-        console.log(firebaseUser.uid)
-
-        //setLoggedUserState();
+        console.log(firebaseUser.uid);
+        userID = firebaseUser.uid;
+        return userID;
         }else {
             console.log('no logueado');
-            //logoutButton.classList.add('hidden');
-            //setLoggedOutUserState();
         }
 
  });
+
+     //Reference messages collection
+     var messagesRef = firebase.database().ref('personalData');
+     var submitButton = document.getElementById('submit__button');
+     submitButton.addEventListener('click', submitForm);
+ 
+     function submitForm(e){
+         e.preventDefault();
+ 
+         //Get values
+         var name = getInputValue('input__name');
+         var surnames = getInputValue('input__surnames');
+         var personalPhone = getInputValue('input__personalPhone');
+         var professionalPhone = getInputValue('input_professionalPhone');
+         var personalEmail = getInputValue('input__personalEmail');
+         var professionalEmail = getInputValue('input__professionalEmail');
+         var capacity = getInputValue('input__capacity');
+         var picture = getInputValue('input__picture');
+
+         //Save fields
+         savePersonalData(userID, name,surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture)
+             
+         //Show alert
+         document.querySelector('.alert').style.display = 'block';
+         // Hide alert after 3 secs
+         setTimeout(function(){
+             document.querySelector('.alert').style.display = 'none';
+         }, 3000);
+         }
+ 
+     function getInputValue(id){
+         return document.getElementById(id).value;
+     }
+ 
+     //Save messages to firebase
+     function savePersonalData(userID, name,surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture){
+         var newMessageRef = messagesRef.push();
+         newMessageRef.set({
+             userID: userID,
+             name: name,
+             surnames: surnames,
+             personalPhone: personalPhone,
+             professionalPhone: professionalPhone,
+             personalEmail: personalEmail,
+             professionalEmail: professionalEmail,
+             capacity: capacity,
+             picture: picture,
+ 
+         })
+     };
 
