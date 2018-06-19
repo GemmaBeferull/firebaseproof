@@ -8,7 +8,7 @@ var config = {
   messagingSenderId: "785154341794"
 };
 firebase.initializeApp(config);
-startFirebase();
+
 }())
 
 var mailInput = document.getElementById('mailInput');
@@ -29,6 +29,7 @@ loginButton.addEventListener('click', e => {
     const promise = auth.signInWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
     alert('user has logged in');
+    startFirebase();
     showForm();
 });
 
@@ -39,13 +40,13 @@ registerButton.addEventListener('click', e => {
     const promise = auth.createUserWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
     alert('user has been registered');
-    showForm()
+    startFirebase();
+    showForm();
 });
 
 logoutButton.addEventListener('click', e => {
     const auth = firebase.auth();
     const promise = auth.signOut();
-
 });
 
 function showForm(){
@@ -55,7 +56,7 @@ function showForm(){
 function startFirebase(){
     firebase.auth().onAuthStateChanged(firebaseUser => {
         if (firebaseUser) {
-            console.log(firebaseUser.uid);
+            console.log(userID);
             userID = firebaseUser.uid;
             return userID;
             }else {
@@ -114,8 +115,7 @@ function startFirebase(){
              personalEmail: professionalEmail,
              professionalEmail: mailInput.value,
              capacity: capacity,
-             picture: picture,
- 
+             picture: picture 
          })
      };
 
