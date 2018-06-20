@@ -19,11 +19,9 @@ var logginArea = document.querySelector('.loginArea');
 var nombre = document.querySelector('.nombre');
 var apellido = document.querySelector('.apellido');
 var guardarButton = document.getElementById('saveButton');
+var visualizar = document.getElementById('visualizar');
 var show = document.querySelector('.show');
-var showName = document.querySelector('.showName');
-var showSurname = document.querySelector('.showlastname');
-var showEmail = document.querySelector('.showEmail');
-var showID = document.querySelector('.showID');
+
 var userID = '';
 
 
@@ -92,10 +90,18 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
         }
  });
 
+ var dbRefObject = firebase.database().ref().child('users');
+ var showName = document.querySelector('.showName');
+var showSurname = document.querySelector('.showlastname');
+var showEmail = document.querySelector('.showEmail');
+var showID = document.querySelector('.showID');
+
+
+ 
  guardarButton.addEventListener('click', ()=>{
     
             event.preventDefault()
-            userReference.on('value', snapshot => {
+            userReference.on('value', snap => {
                 userReference.set({
                     email: mailInput.value,
                     nombre: nombre.value,
@@ -103,12 +109,11 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
                     ID: userID
                 });
             });
-        
+        var userRef = dbRefObject.child(userID);
             formArea.classList.add('hidden');
             show.classList.remove('hidden');
-            var dbRefObject = firebase.database().ref().child(`users/${firebaseUser.uid}`)
-            dbRefObject.on('value', snap => {
-                console.log(snap.val());
+            userRef.on('value', snap => {
+               console.log(snap.val());
                 showName.innerHTML = snap.val().nombre;
                 showSurname.innerHTML = snap.val().apellido;
                 showEmail.innerHTML = snap.val().email;
@@ -118,69 +123,21 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
     
 })
 
+visualizar.addEventListener('click', ()=>{
+    event.preventDefault()
+    var userRef = dbRefObject.child(userID);
+            formArea.classList.add('hidden');
+            show.classList.remove('hidden');
+            userRef.on('value', snap => {
+               console.log(snap.val());
+                showName.innerHTML = snap.val().nombre;
+                showSurname.innerHTML = snap.val().apellido;
+                showEmail.innerHTML = snap.val().email;
+                showID.innerHTML = snap.val().userID;
+            });
+        
+})
 
 
 
 
-
- 
-    
-  
-    
-    
-   
-    
-    
-    
-        //  //Reference messages collection
-        //  var messagesRef = firebase.database().ref(`users/${userID}`);
-        //  var submitButton = document.getElementById('submit__button');
-        //  submitButton.addEventListener('click', submitForm);
-     
-        //  function submitForm(e){
-        //      e.preventDefault();
-     
-        //      //Get values
-        //      var name = getInputValue('input__name');
-        //      var surnames = getInputValue('input__surnames');
-        //      var personalPhone = getInputValue('input__personalPhone');
-        //      var professionalPhone = getInputValue('input_professionalPhone');
-        //      var personalEmail = getInputValue('input__personalEmail');
-        //      var professionalEmail = getInputValue('input__professionalEmail');
-        //      var capacity = getInputValue('input__capacity');
-        //      var picture = getInputValue('input__picture');
-        //      var password = passwordInput.value;
-             
-    
-        //      //Save fields
-        //      savePersonalData(userID, password, name, surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture)
-                 
-        //      //Show alert
-        //      document.querySelector('.alert').style.display = 'block';
-        //      // Hide alert after 3 secs
-        //      setTimeout(function(){
-        //          document.querySelector('.alert').style.display = 'none';
-        //      }, 3000);
-        //      }
-     
-        //  function getInputValue(id){
-        //      return document.getElementById(id).value;
-        //  }
-     
-        //  //Save messages to firebase
-        //  function savePersonalData(userID, password, name, surnames, personalPhone, professionalPhone, personalEmail, professionalEmail, capacity, picture){
-        //      var newMessageRef = messagesRef.push();
-        //      newMessageRef.set({
-        //          userID: userID,
-        //          password: password,
-        //          name: name,
-        //          surnames: surnames,
-        //          personalPhone: personalPhone,
-        //          professionalPhone: professionalPhone,
-        //          personalEmail: professionalEmail,
-        //          professionalEmail: mailInput.value,
-        //          capacity: capacity,
-        //          picture: picture,
-     
-        //      })
-        //  };
