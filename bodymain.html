@@ -14,35 +14,29 @@
     </div>
     <div class= "loginArea">
         <input id="mailInput" type="text" placeholder="email">
-        <input id="passwordInput" type="password" placeholder="password">
+        <input id="passwordInput" type="text" placeholder="password">
         <button id="loginButton">Login</button>
         <button id="registerButton">Register</button>
-        <button id="logoutButton" class= "hidden">Logout</button>
+        
     </div>
-
-
-    <div class="form" >
-        <div class="alert">Tus datos se han guardado correctamente</div>
-     <form class="form__container hide" action="submit">
-        <input id="input__name" type="text" class="input__field" required placeholder="Nombre">
-        <input id= "input__surnames" type="text" class="input__field" required placeholder="Apellidos">
-        <input id="input__personalPhone" type="text" class="input__field" placeholder="Teléfono personal">
-        <input id="input_professionalPhone" type="text" class="input__field" required placeholder="Teléfono profesional">
-        <input id="input__personalEmail" type="text" class="input__field" placeholder="Email personal">
-        <input id="input__professionalEmail" type="text" class="input__field" placeholder="Email profesional">
-        <input id="input__capacity" type="text" class="input__field" required placeholder="Capacidad">
-        <input id="input__picture" type="text" class="input__field" required placeholder="Foto">
-        <button id="submit__button" type="button">Enviar</button>
-     </form>
-    </div>
-    <button class="hide" id="logoutButton" >Logout</button>
-   
-   <div class="names hide">
-       <p class = "name">Nombre</p>
-       <p class= "lastname">Apellido</p>
+    <button id="logoutButton" class= "hidden">Logout</button>
+    
+   <form class="hidden" id ="formulario">
+        <h1>Rellena con tu nombre y apellido</h1>
+    <input type="text" name="firstname" class="nombre">
+    <input type="text" name="lastname" class="apellido">
+    <button id="saveButton">Guardar</button>
+    <button id="visualizar">visualizar</button>
+   </form>
+   <div class="hidden show">
+       <p class = "showName">Nombre</p>
+       <p class= "showlastname">Apellido</p>
+       <p class="showEmail"></p>
+       <p class="showID"></p>
    </div>
 
     
 <script src="/src/main.js"></script>
+
 </body>
 </html>

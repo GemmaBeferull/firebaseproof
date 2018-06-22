@@ -1,16 +1,8 @@
 body {
     text-align: center;
 }
-.hide {
-    display: none;
-}
 
-.alert{
-    text-align: center;
-    padding: 10px;
-    background: #79c879;
-    color: #fff;
-    margin-bottom: 1px;
+.hidden {
     display: none;
 }
 
