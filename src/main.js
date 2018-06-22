@@ -22,7 +22,6 @@ var guardarButton = document.getElementById('saveButton');
 var visualizar = document.getElementById('visualizar');
 var show = document.querySelector('.show');
 var input = document.querySelectorAll('input');
-
 var userID = '';
 
 
@@ -38,12 +37,18 @@ loginButton.addEventListener('click', e => {
 });
 
 registerButton.addEventListener('click', e => {
+    if (mailInput.value.includes('@kairosds.com')){
     const mail = mailInput.value;
     const password = passwordInput.value;
     const auth = firebase.auth();
+
     
     const promise = auth.createUserWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
+    }
+    else {
+        console.log('email de kairós')
+    }
     
 });
 
@@ -95,22 +100,22 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
 
     var dbRefObject = firebase.database().ref().child('users');
     var showName = document.querySelector('.showName');
-var showSurname = document.querySelector('.showlastname');
-var showEmail = document.querySelector('.showEmail');
-var showID = document.querySelector('.showID');
+    var showSurname = document.querySelector('.showlastname');
+    var showEmail = document.querySelector('.showEmail');
+    var showID = document.querySelector('.showID');
 
-for(var i = 0; i < input.length; i++){
-    input[i].addEventListener("focus", ()=> {
-        saveData();
-    });
-}
+// for(var i = 0; i < input.length; i++){
+//     input[i].addEventListener("focus", ()=> {
+//         saveData();
+//     });
+// }
 
     guardarButton.addEventListener('click', saveData);
     
     function saveData() {
     
             event.preventDefault()
-            userReference.on('value', () => {
+            userReference.on('value', snap => {
                 userReference.set({
                     email: mailInput.value,
                     nombre: nombre.value,
@@ -128,8 +133,6 @@ for(var i = 0; i < input.length; i++){
                 showEmail.innerHTML = snap.val().email;
                 showID.innerHTML = snap.val().userID;
             });
-        
-    
 };
 
 visualizar.addEventListener('click', ()=>{
