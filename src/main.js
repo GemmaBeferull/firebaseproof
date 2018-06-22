@@ -34,17 +34,20 @@ loginButton.addEventListener('click', e => {
     
     const promise = auth.signInWithEmailAndPassword(mail, password);
     promise.catch (e => console.log (e.message))
-    
+    handleLogin ()
 });
 
 registerButton.addEventListener('click', e => {
-    const mail = mailInput.value;
-    const password = passwordInput.value;
-    const auth = firebase.auth();
-    
-    const promise = auth.createUserWithEmailAndPassword(mail, password);
-    promise.catch (e => console.log (e.message))
-    
+    if (mailInput.value.includes('@kairosds.com')){
+        const mail = mailInput.value;
+        const password = passwordInput.value;
+        const auth = firebase.auth();
+        const promise = auth.createUserWithEmailAndPassword(mail, password);
+        promise.catch (e => console.log (e.message))
+        handleLogin ()
+    }else {
+        console.log('email de kairós')
+    }
 });
 
 var logoutButton = document.getElementById('logoutButton');
@@ -57,93 +60,84 @@ logoutButton.addEventListener('click', e => {
     logoutButton.classList.add('hidden');
     formArea.classList.add('hidden');
     show.classList.add('hidden');
-
+    handleLogin ()
 });
 
 var userReference; 
+function handleLogin () {
+    firebase.auth().onAuthStateChanged(firebaseUser => {
 
-firebase.auth().onAuthStateChanged(firebaseUser => {
-
-    if (firebaseUser) {
-        
-        console.log(firebaseUser);
-        logginArea.classList.add('hidden');
-        logoutButton.classList.remove('hidden');
-        formArea.classList.remove('hidden');
-        show.classList.remove('hidden');
-
-        userID = firebaseUser.uid;
-        
-      
-        userReference = firebase.database().ref(`users/${firebaseUser.uid}`);
-        userReference.once('value', snapshot => {
-            if (!snapshot.val()) {
-                // User does not exist, create user entry
-                console.log(mailInput.value)
-                userReference.set({
+        if (firebaseUser) {
+            logginArea.classList.add('hidden');
+            logoutButton.classList.remove('hidden');
+            formArea.classList.remove('hidden');
+            show.classList.remove('hidden');
+            userID = firebaseUser.uid;
+            userReference = firebase.database().ref(`users/${firebaseUser.uid}`);
+            userReference.once('value', snapshot => {
+                if (!snapshot.val()) {
+                    userReference.set({
                     email: mailInput.value
                  });
-            }
-        });
-          
-                return userID;
+                }
+            });
+            return userID;
         }else {
             console.log('no logueado');
-           
         }
- });
+    });
+focus();
+}
 
- var dbRefObject = firebase.database().ref().child('users');
- var showName = document.querySelector('.showName');
+guardarButton.addEventListener('click', saveData); 
+function saveData() {
+    
+    event.preventDefault()
+    userReference.on('value', () => {
+        userReference.set({
+            email: mailInput.value,
+            nombre: nombre.value,
+            apellido: apellido.value,
+            ID: userID
+        });
+    });
+    var userRef = dbRefObject.child(userID);
+        //formArea.classList.add('hidden');
+    show.classList.remove('hidden');
+    userRef.on('value', snap => {
+        console.log(snap.val());
+        showName.innerHTML = snap.val().nombre;
+        showSurname.innerHTML = snap.val().apellido;
+        showEmail.innerHTML = snap.val().email;
+        showID.innerHTML = snap.val().userID;
+    });
+}
+
+function focus(){
+    for(var i = 0; i < input.length; i++){
+        input[i].addEventListener("focus", ()=> {
+             saveData();
+        });
+    }
+}
+
+var dbRefObject = firebase.database().ref().child('users');
+var showName = document.querySelector('.showName');
 var showSurname = document.querySelector('.showlastname');
 var showEmail = document.querySelector('.showEmail');
 var showID = document.querySelector('.showID');
 
-for(var i = 0; i < input.length; i++){
-    input[i].addEventListener("focus", ()=> {
-        saveData();
-    });
-}
-
- guardarButton.addEventListener('click', saveData);
- 
- function saveData() {
-    
-            event.preventDefault()
-            userReference.on('value', snap => {
-                userReference.set({
-                    email: mailInput.value,
-                    nombre: nombre.value,
-                    apellido: apellido.value,
-                    ID: userID
-                });
-            });
-        var userRef = dbRefObject.child(userID);
-            //formArea.classList.add('hidden');
-            show.classList.remove('hidden');
-            userRef.on('value', snap => {
-               console.log(snap.val());
-                showName.innerHTML = snap.val().nombre;
-                showSurname.innerHTML = snap.val().apellido;
-                showEmail.innerHTML = snap.val().email;
-                showID.innerHTML = snap.val().userID;
-            });
-        
-    
-};
-
 visualizar.addEventListener('click', ()=>{
     event.preventDefault()
     var userRef = dbRefObject.child(userID);
-            formArea.classList.add('hidden');
-            show.classList.remove('hidden');
-            userRef.on('value', snap => {
-               console.log(snap.val());
-                showName.innerHTML = snap.val().nombre;
-                showSurname.innerHTML = snap.val().apellido;
-                showEmail.innerHTML = snap.val().email;
-                showID.innerHTML = snap.val().userID;
-            });
+        formArea.classList.add('hidden');
+        show.classList.remove('hidden');
+        userRef.on('value', snap => {
+            showName.innerHTML = snap.val().nombre;
+            showSurname.innerHTML = snap.val().apellido;
+            showEmail.innerHTML = snap.val().email;
+            showID.innerHTML = snap.val().userID;
+        });
         
 })
 
