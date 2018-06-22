@@ -21,6 +21,7 @@ var apellido = document.querySelector('.apellido');
 var guardarButton = document.getElementById('saveButton');
 var visualizar = document.getElementById('visualizar');
 var show = document.querySelector('.show');
+var input = document.querySelectorAll('input');
 
 var userID = '';
 
@@ -69,6 +70,8 @@ firebase.auth().onAuthStateChanged(firebaseUser => {
         logginArea.classList.add('hidden');
         logoutButton.classList.remove('hidden');
         formArea.classList.remove('hidden');
+        show.classList.remove('hidden');
+
         userID = firebaseUser.uid;
         
       
@@ -96,12 +99,18 @@ var showSurname = document.querySelector('.showlastname');
 var showEmail = document.querySelector('.showEmail');
 var showID = document.querySelector('.showID');
 
+for(var i = 0; i < input.length; i++){
+    input[i].addEventListener("focus", ()=> {
+        saveData();
+    });
+}
 
+ guardarButton.addEventListener('click', saveData);
  
- guardarButton.addEventListener('click', ()=>{
+ function saveData() {
     
             event.preventDefault()
-            userReference.on('value', snap => {
+            userReference.on('value', () => {
                 userReference.set({
                     email: mailInput.value,
                     nombre: nombre.value,
@@ -110,7 +119,7 @@ var showID = document.querySelector('.showID');
                 });
             });
         var userRef = dbRefObject.child(userID);
-            formArea.classList.add('hidden');
+            //formArea.classList.add('hidden');
             show.classList.remove('hidden');
             userRef.on('value', snap => {
                console.log(snap.val());
@@ -121,7 +130,7 @@ var showID = document.querySelector('.showID');
             });
         
     
-})
+};
 
 visualizar.addEventListener('click', ()=>{
     event.preventDefault()
