@@ -110,7 +110,7 @@ for(var i = 0; i < input.length; i++){
  function saveData() {
     
             event.preventDefault()
-            userReference.on('value', () => {
+            userReference.on('value', snap => {
                 userReference.set({
                     email: mailInput.value,
                     nombre: nombre.value,
